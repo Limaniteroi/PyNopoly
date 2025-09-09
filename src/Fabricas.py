@@ -1,5 +1,5 @@
 from typing import List
-from .tabuleiro import (
+from .Tabuleiro import (
     Tabuleiro, CasaTabuleiro, PontoDePartida, Imovel, CasaCofre, Imposto, 
     Estacao, CasaSorte, Cadeia, Companhia, EstacionamentoLivre, VaParaCadeia
 )
@@ -62,4 +62,3 @@ class TabuleiroFactory:
         casas.append(Imovel("Ipanema", 39, 400, 200, "Azul-Escuro", [50, 200, 600, 1400, 1700, 2000]))
         
         return Tabuleiro(casas)
-
