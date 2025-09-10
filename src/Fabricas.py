@@ -1,16 +1,17 @@
+from abc import abstractmethod, ABC
 from typing import List
 from .Tabuleiro import (
     Tabuleiro, CasaTabuleiro, PontoDePartida, Imovel, CasaCofre, Imposto, 
     Estacao, CasaSorte, Cadeia, Companhia, EstacionamentoLivre, VaParaCadeia
 )
+class TabuleiroAbstractFactory(ABC):
+    @abstractmethod
+    def cria_tabuleiro(self) -> Tabuleiro:
+        pass
 
-class TabuleiroFactory:
-    """
-    Fábrica responsável por criar instâncias de Tabuleiro.
-    A lógica de quais casas vão em quais posições está isolada aqui.
-    """
+class TabuleiroPadraoFactory(ABC):
     @staticmethod
-    def criar_tabuleiro_padrao() -> Tabuleiro:
+    def criar_tabuleiro(self) -> Tabuleiro:
         casas: List[CasaTabuleiro] = []
 
         # Lado 1 do Tabuleiro (Do Ponto de Partida à Cadeia)
