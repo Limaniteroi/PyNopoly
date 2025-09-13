@@ -113,5 +113,6 @@ class Jogador:
         print(f"Jogador {self}: tirou {dados} nos dados.")
         return dados
 
+    @property
     def get_posicao(self):
         return self.posicao
