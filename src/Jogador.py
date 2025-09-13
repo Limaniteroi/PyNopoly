@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import List
 from abc import ABC, abstractmethod
 from Terreno.py import Terreno, Imovel
+import random
 
 
 class JogadorState(ABC):
@@ -104,3 +105,10 @@ class Jogador:
     def mudar_estado(self, novo_estado: JogadorState):
         """Altera o objeto de estado do jogador."""
         self.estado_atual = novo_estado
+
+    def lancar_dados(self, n_dados: int):
+        dados = []
+        for _ in range(n_dados):
+            dados.append(random.randint(1, 6))
+        print(f"Jogador {self}: tirou {dados} nos dados.")
+        return dados
