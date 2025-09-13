@@ -112,3 +112,6 @@ class Jogador:
             dados.append(random.randint(1, 6))
         print(f"Jogador {self}: tirou {dados} nos dados.")
         return dados
+
+    def get_posicao(self):
+        return self.posicao
