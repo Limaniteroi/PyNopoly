@@ -1,7 +1,8 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from typing import List, Optional
-from .Jogador import Jogador
+from typing import List, Optional, TYPE_CHECKING
+if TYPE_CHECKING:
+    from .Jogador import Jogador
 
 class CasaTabuleiro(ABC):
     def __init__(self, nome: str, pos: int):

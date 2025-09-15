@@ -10,7 +10,6 @@ class TabuleiroAbstractFactory(ABC):
         pass
 
 class TabuleiroPadraoFactory(ABC):
-    @staticmethod
     def criar_tabuleiro(self) -> Tabuleiro:
         casas: List[CasaTabuleiro] = []
 
