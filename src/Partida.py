@@ -76,9 +76,3 @@ class Partida:
         self.jogador_atual_idx = (self.jogador_atual_idx + 1) % len(self.jogadores)
         print("-" * 25)
 
-    def verificar_fim_de_jogo(self):
-        """Verifica se há apenas um jogador restante."""
-        jogadores_ativos = [j for j in self.jogadores if not j.faliu]
-        if len(jogadores_ativos) == 1:
-            self.em_andamento = False
-            print(f"\n--- FIM DE JOGO! O VENCEDOR É {jogadores_ativos[0].peca}! ---")

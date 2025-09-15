@@ -13,20 +13,20 @@ class JogadorState(ABC):
 
 class JogadorJogandoState(JogadorState):
     def executar_acao_do_turno(self, jogador: Jogador):
-        print(f"Estado de {jogador.nome}: Jogando Normalmente. Rolando dados...")
-        return lancar_dados() # Retorna os dados para usar pelo pygame
+        print(f"Estado de {jogador.peca}: Jogando Normalmente. Rolando dados...")
+        return jogador.lancar_dados() # Retorna os dados para usar pelo pygame
 
 
 class JogadorPresoState(JogadorState):
     def executar_acao_do_turno(self, jogador: Jogador):
-        print(f"Estado de {jogador.nome}: Preso. Tentando sair da cadeia...")
+        print(f"Estado de {jogador.peca}: Preso. Tentando sair da cadeia...")
         # Lógica de tentar rolar dupla, pagar ou usar carta.
 
 
 class JogadorFalidoState(JogadorState):
     def executar_acao_do_turno(self, jogador: Jogador):
         print(
-            f"Estado de {jogador.nome}: Falido. Tal metodo não deveria ter sido chamado, erro de lógica."
+            f"Estado de {jogador.peca}: Falido. Tal metodo não deveria ter sido chamado, erro de lógica."
         )
 
 
@@ -52,7 +52,7 @@ class Jogador:
     def mover(self, passos: int):
         # O operador % 40 garante que o tabuleiro seja circular (posições 0 a 39)
         self.posicao = (self.posicao + passos) % 40
-        print(f"{self.nome} moveu-se {passos} casas e está na posição {self.posicao}.")
+        print(f"{self.peca} moveu-se {passos} casas e está na posição {self.posicao}.")
 
     def comprar_imovel(self, imovel: Terreno):
         """Tenta comprar um imóvel. O jogador deve ter dinheiro suficiente."""
@@ -60,18 +60,18 @@ class Jogador:
             self.dinheiro -= imovel.preco
             self.propriedades.append(imovel)
             imovel.set_dono(self)
-            print(f"{self.nome} comprou {imovel.nome} por ${imovel.preco}.")
+            print(f"{self.peca} comprou {imovel.nome} por ${imovel.preco}.")
         else:
-            print(f"{self.nome} não tem dinheiro para comprar {imovel.nome}.")
+            print(f"{self.peca} não tem dinheiro para comprar {imovel.nome}.")
 
     def pagar_aluguel(self, dono: Jogador, valor: int):
         """Paga um valor de aluguel para outro jogador."""
         if self.dinheiro >= valor:
             self.dinheiro -= valor
             dono.receber_dinheiro(valor)
-            print(f"{self.nome} pagou ${valor} de aluguel para {dono.nome}.")
+            print(f"{self.peca} pagou ${valor} de aluguel para {dono.peca}.")
         else:
-            print(f"{self.nome} não tem dinheiro para pagar o aluguel e faliu!")
+            print(f"{self.peca} não tem dinheiro para pagar o aluguel e faliu!")
             self.mudar_estado(JogadorFalidoState())
             # Lógica de falência viria aqui tirar imoveis? apagar peca?
 
@@ -85,7 +85,7 @@ class Jogador:
         #    se outro tiver 0) <- N sei se faremos isso ou n.
         # 3. Verificar se o jogador tem dinheiro.
         # 4. Debitar o valor e incrementar o número de casas no imóvel.
-        print(f"{self.nome} tentando construir casa em {imovel.nome}...")
+        print(f"{self.peca} tentando construir casa em {imovel.nome}...")
         pass
 
     def calcular_imposto(self) -> int:
@@ -98,7 +98,7 @@ class Jogador:
         """Muda o estado do jogador para 'Preso' e o move para a cadeia."""
         self.posicao = 10  # Posição da cadeia no tabuleiro padrão
         self.mudar_estado(JogadorPresoState())
-        print(f"{self.nome} foi para a cadeia!")
+        print(f"{self.peca} foi para a cadeia!")
 
     def mudar_estado(self, novo_estado: JogadorState):
         """Altera o objeto de estado do jogador."""
