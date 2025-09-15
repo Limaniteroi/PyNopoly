@@ -1,12 +1,10 @@
 from __future__ import annotations
 from typing import List
 import random
-
-# Importando as classes dos outros módulos do projeto
-from .jogador import Jogador
-from .fabricas import TabuleiroAbstractFactory, TabuleiroPadraoFactory
-from .banco import Banco
-from .tabuleiro import Tabuleiro
+from .Jogador import Jogador
+from .Fabricas import TabuleiroAbstractFactory, TabuleiroPadraoFactory
+from .Banco import Banco
+from .Tabuleiro import Tabuleiro
 
 
 class Partida:
@@ -16,15 +14,13 @@ class Partida:
     o tabuleiro e o banco.
     """
 
-    def __init__(self, nomes_jogadores: List[str], factory: TabuleiroAbstractFactory):
+    def __init__(self, pecas_jogadores: List[str], factory: TabuleiroAbstractFactory):
         print("Uma nova partida está sendo criada...")
 
         # GRASP CREATOR: A Partida cria os objetos que ela agrega e usa intensamente.
         self.banco = Banco()
-        self.tabuleiro = factory.cria_tabuleiro()
-        self.jogadores = [
-            Jogador(nome, f"Peça {i + 1}") for i, nome in enumerate(nomes_jogadores)
-        ]
+        self.tabuleiro = factory.criar_tabuleiro()
+        self.jogadores = [Jogador(peca) for peca in pecas_jogadores]
 
         # Atributos para controlar o estado do jogo
         self.jogador_atual_idx: int = 0
@@ -44,6 +40,8 @@ class Partida:
 
     def jogar_rodada(self):
         """Executa um turno completo para o jogador atual."""
+
+        #Não sei se esse if seria necessário, conferir dps
         if not self.em_andamento:
             print("O jogo já terminou!")
             return
@@ -54,14 +52,13 @@ class Partida:
         # e retorna o valor dos dados.
         valor_dados = jogador_da_vez.jogar_round()
 
-        # A Partida, como Controller, pega o resultado e atualiza o estado do jogo
         if valor_dados > 0:
             posicao_anterior = jogador_da_vez.posicao
-            jogador_da_vez.mover(valor_dados)
+            jogador_da_vez.mover(sum(valor_dados))
 
             # Lógica para pagar salário ao passar pelo Ponto de Partida
             if jogador_da_vez.posicao < posicao_anterior:
-                print(f"{jogador_da_vez.nome} completou uma volta!")
+                print(f"{jogador_da_vez.peca} completou uma volta!")
                 self.banco.pagar_salario(jogador_da_vez)
 
             # Obtém a casa onde o jogador parou e executa sua ação
@@ -84,20 +81,4 @@ class Partida:
         jogadores_ativos = [j for j in self.jogadores if not j.faliu]
         if len(jogadores_ativos) == 1:
             self.em_andamento = False
-            print(f"\n--- FIM DE JOGO! O VENCEDOR É {jogadores_ativos[0].nome}! ---")
-
-
-# --- Exemplo de como usar a classe Partida (para testes) ---
-if __name__ == "__main__":
-    # 1. Escolha uma fábrica
-    fabrica = TabuleiroPadraoFactory()
-
-    # 2. Crie uma instância da Partida
-    nomes = ["Alice", "Beto"]
-    minha_partida = Partida(nomes_jogadores=nomes, factory=fabrica)
-
-    # 3. Inicie o jogo
-    minha_partida.iniciar_jogo()
-
-    # Em um jogo real, haveria um loop aqui controlado por input do usuário
-    # que chamaria minha_partida.jogar_rodada() a cada turno.
+            print(f"\n--- FIM DE JOGO! O VENCEDOR É {jogadores_ativos[0].peca}! ---")

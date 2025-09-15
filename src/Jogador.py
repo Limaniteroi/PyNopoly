@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import List
 from abc import ABC, abstractmethod
-from Terreno.py import Terreno, Imovel
+from .Tabuleiro import Terreno, Imovel
 import random
 
 
@@ -14,7 +14,7 @@ class JogadorState(ABC):
 class JogadorJogandoState(JogadorState):
     def executar_acao_do_turno(self, jogador: Jogador):
         print(f"Estado de {jogador.nome}: Jogando Normalmente. Rolando dados...")
-        # Lógica de rolar dados e chamar o método mover() do jogador.
+        return lancar_dados() # Retorna os dados para usar pelo pygame
 
 
 class JogadorPresoState(JogadorState):
@@ -31,8 +31,7 @@ class JogadorFalidoState(JogadorState):
 
 
 class Jogador:
-    def __init__(self, nome: str, peca: str):
-        self.nome = nome
+    def __init__(self, peca: str):
         self.peca = peca
         self.dinheiro: int = 1500
         self.posicao: int = 0
@@ -81,7 +80,6 @@ class Jogador:
 
     def construir_casa(self, imovel: Imovel):
         """Constrói uma casa em um imóvel."""
-        # A lógica aqui é complexa:
         # 1. Verificar se o jogador tem o monopólio da cor do imóvel.
         # 2. Verificar a regra de construção uniforme (não pode ter 2 casas em um
         #    se outro tiver 0) <- N sei se faremos isso ou n.
@@ -106,9 +104,9 @@ class Jogador:
         """Altera o objeto de estado do jogador."""
         self.estado_atual = novo_estado
 
-    def lancar_dados(self, n_dados: int):
+    def lancar_dados(self):
         dados = []
-        for _ in range(n_dados):
+        for _ in range(2):
             dados.append(random.randint(1, 6))
         print(f"Jogador {self}: tirou {dados} nos dados.")
         return dados
