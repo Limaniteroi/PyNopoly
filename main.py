@@ -1,5 +1,6 @@
 import pygame
 import sys
+import os
 from pygame._sdl2.video import Window, Renderer, Texture
 
 
@@ -15,7 +16,12 @@ class Game:
             pygame.quit()
             exit()
 
-        self.window.title = "PyNopoly"
+        #Load arts
+        self.menu_surface = pygame.image.load(os.path.join('arts', 'menu_placeholder.jpeg'))
+
+        #Converting intto textures
+        self.menu_texture = Texture.from_surface(self.renderer, self.menu_surface)
+
         self.clock = pygame.time.Clock()
 
     def run(self):
@@ -27,8 +33,8 @@ class Game:
                 if event.type == pygame.KEYDOWN:
                     pass
 
-            self.renderer.draw_color = (10, 20, 40, 255)
             self.renderer.clear()
+            self.renderer.blit(self.menu_texture)
             self.renderer.present()
             self.clock.tick(60)
 
