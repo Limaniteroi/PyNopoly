@@ -17,10 +17,10 @@ class Game:
             exit()
 
         #Load arts
-        self.menu_surface = pygame.image.load(os.path.join('arts', 'menu_placeholder.jpeg'))
+        menu_surface = pygame.image.load(os.path.join('arts', 'menu_placeholder.jpeg'))
 
         #Converting intto textures
-        self.menu_texture = Texture.from_surface(self.renderer, self.menu_surface)
+        self.menu_texture = Texture.from_surface(self.renderer, menu_surface)
 
         self.clock = pygame.time.Clock()
 
