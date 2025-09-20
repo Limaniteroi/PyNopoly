@@ -94,14 +94,6 @@ class Jogador:
         # Isso exigiria um método para calcular o valor total (dinheiro + propriedades + construções).
         pass
 
-
-    #Isso deveria estar na ação va para cadeia.
-    def ir_para_cadeia(self):
-        """Muda o estado do jogador para 'Preso' e o move para a cadeia."""
-        self.posicao = 10  # Posição da cadeia no tabuleiro padrão
-        self.mudar_estado(JogadorPresoState())
-        print(f"{self.peca} foi para a cadeia!")
-
     def mudar_estado(self, novo_estado: JogadorState):
         """Altera o objeto de estado do jogador."""
         self.estado_atual = novo_estado
