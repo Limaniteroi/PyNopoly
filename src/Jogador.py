@@ -88,11 +88,21 @@ class Jogador:
         print(f"{self.peca} tentando construir casa em {imovel.nome}...")
         pass
 
+    def calcular_valor_total(self) -> int:
+        valor_total = self.dinheiro
+        for propriedade in self.propriedades:
+            valor_total += propriedade.preco
+            if isinstance(propriedade, Imovel):
+                # Custo de construção de cada casa (suposição)
+                custo_casa = 100
+                valor_total += propriedade.casas * custo_casa
+        return valor_total
+
     def calcular_imposto(self) -> int:
-        """Calcula o imposto a ser pago. Pode ter lógicas diferentes."""
-        # A regra do Imposto de Renda permite escolher entre $200 ou 10% do seu valor total.
-        # Isso exigiria um método para calcular o valor total (dinheiro + propriedades + construções).
-        pass
+        """Calcula o imposto a ser pago, que é o menor valor entre $200 e 10% do valor total do jogador."""
+        valor_total = self.calcular_valor_total()
+        imposto_percentual = int(valor_total * 0.10)
+        return min(200, imposto_percentual)
 
     def mudar_estado(self, novo_estado: JogadorState):
         """Altera o objeto de estado do jogador."""
