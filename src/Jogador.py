@@ -79,14 +79,44 @@ class Jogador:
         self.dinheiro += valor
 
     def construir_casa(self, imovel: Imovel):
-        """Constrói uma casa em um imóvel."""
-        # 1. Verificar se o jogador tem o monopólio da cor do imóvel.
-        # 2. Verificar a regra de construção uniforme (não pode ter 2 casas em um
-        #    se outro tiver 0) <- N sei se faremos isso ou n.
-        # 3. Verificar se o jogador tem dinheiro.
-        # 4. Debitar o valor e incrementar o número de casas no imóvel.
+        """Constrói uma casa em um imóvel, seguindo as regras do Monopoly."""
         print(f"{self.peca} tentando construir casa em {imovel.nome}...")
-        pass
+
+        # 1. Verificar se o jogador tem o monopólio da cor do imóvel.
+        # Will be implemented later
+
+        # Get all properties of the color the player owns
+        propriedades_da_cor = [p for p in self.propriedades if isinstance(p, Imovel) and p.cor == imovel.cor]
+        
+        # If the player doesn't own any property of this color (should not happen if called correctly)
+        if not propriedades_da_cor:
+            print(f"{self.peca} não possui nenhuma propriedade do grupo {imovel.cor}.")
+            return
+
+        # 2. Verificar a regra de construção uniforme (entre as propriedades que possui)
+        min_casas_no_grupo = min(p.casas for p in propriedades_da_cor)
+        if imovel.casas > min_casas_no_grupo:
+            print(f"Construção não é uniforme. Construa primeiro em outras propriedades do grupo {imovel.cor} que você possui.")
+            return
+            
+        if imovel.casas >= 5:
+            print(f"{imovel.nome} já tem um hotel. Não é possível construir mais.")
+            return
+
+        # 3. Verificar se o jogador tem dinheiro.
+        custo = imovel.preco_casa
+        if self.dinheiro < custo:
+            print(f"{self.peca} não tem dinheiro suficiente para construir uma casa por ${custo}.")
+            return
+
+        # 4. Debitar o valor e incrementar o número de casas no imóvel.
+        self.dinheiro -= custo
+        imovel.casas += 1
+        
+        if imovel.casas == 5:
+            print(f"{self.peca} construiu um hotel em {imovel.nome} por ${custo}.")
+        else:
+            print(f"{self.peca} construiu uma casa em {imovel.nome} por ${custo}. Total de casas: {imovel.casas}.")
 
     def calcular_valor_total(self) -> int:
         valor_total = self.dinheiro
