@@ -1,7 +1,7 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 import random  # exemplo de baralho
-from Jogador.py import Jogador
+from .Jogador import Jogador
 
 
 class Acao(ABC):
@@ -41,12 +41,12 @@ class Carta(ABC):
 
 
 class CartaSorte(Carta):
-    def __init__(self, nome: str, acao: Acao):
+    def _init_(self, nome: str, acao: Acao):
         super().__init__(nome, acao)
 
 
 class CartaCofre(Carta):
-    def __init__(self, nome: str, acao: Acao):
+    def _init_(self, nome: str, acao: Acao):
         super().__init__(nome, acao)
 
 
@@ -63,7 +63,7 @@ if __name__ == "__main__":
 
     # Criando um jogador para o teste
     jogador_teste = Jogador("Fernando")
-    print(f"--- Turno de {jogador_teste.nome} ---")
+    print(f"--- Turno de {jogador_teste.peca} ---")
     print("Jogador parou na casa Sorte!")
 
     # Simulação de tirar uma carta

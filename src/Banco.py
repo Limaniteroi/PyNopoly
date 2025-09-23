@@ -3,8 +3,8 @@ from typing import List, TYPE_CHECKING
 
 # Usamos TYPE_CHECKING para evitar importações circulares com Jogador e Terreno
 if TYPE_CHECKING:
-    from .jogador import Jogador
-    from .tabuleiro import Terreno
+    from .Jogador import Jogador
+    from .Terreno import Terreno
 
 
 class Leilao:
