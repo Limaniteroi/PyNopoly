@@ -62,7 +62,7 @@ class TabuleiroAleatorioFactory(ABC):
 
 
         # Seleciona itens aleatórios de arquivos JSON
-        path_imoveis_aleatorios = 'CasasAleatoriasImoveis,json'
+        path_imoveis_aleatorios = 'CasasAleatoriasImoveis.json'
         path_estacoes_aleatorias = 'CasasAleatoriasEstacoes.json'
         path_companhias_aleatorias = 'CasasAleatoriasCompanhias.json'
 
