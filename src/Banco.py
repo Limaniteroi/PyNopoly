@@ -6,21 +6,6 @@ if TYPE_CHECKING:
     from .jogador import Jogador
     from .tabuleiro import Terreno
 
-
-class Leilao:
-    """
-    Representa o sistema de leilão. A lógica complexa de lances
-    sera implementada aqui.
-    """
-
-    def realizar_leilao(self, imovel: Terreno, jogadores: List[Jogador]):
-        print(f"\n--- LEILÃO INICIADO PARA: {imovel.nome} ---")
-        # A lógica de receber lances dos jogadores e determinar o vencedor
-        # seria implementada neste método.
-        print("Leilão concluído.")
-        pass
-
-
 class Banco:
     def __init__(self):
         # Podemos mudar o numero aqui depois, mas tem algo de casas disponiveis no .pdf das regras.
