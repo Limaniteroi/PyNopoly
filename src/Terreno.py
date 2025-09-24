@@ -4,7 +4,7 @@ from .Jogador import Jogador
 from .CasaTabuleiro import CasaTabuleiro
 
 class Terreno(CasaTabuleiro, ABC):
-    def __init__(self, nome: str, pos: int ,preco: int, cor: str):
+    def __init__(self, nome: str, pos: int, preco: int, cor: str):
         super().__init__(nome, pos)
         self.preco = preco
         self.cor = cor
