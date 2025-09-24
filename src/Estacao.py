@@ -10,8 +10,5 @@ class Estacao(Terreno):
         # A lógica do aluguel foi simplificada para o teste
         return 0
     
-    def set_dono(self, jogador: Jogador):
-        self.dono = jogador
-
     def action(self, jogador: Jogador, val_dados: int = 0):
         pass
