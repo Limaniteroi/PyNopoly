@@ -41,12 +41,12 @@ class Carta(ABC):
 
 
 class CartaSorte(Carta):
-    def _init_(self, nome: str, acao: Acao):
+    def __init__(self, nome: str, acao: Acao):
         super().__init__(nome, acao)
 
 
 class CartaCofre(Carta):
-    def _init_(self, nome: str, acao: Acao):
+    def __init__(self, nome: str, acao: Acao):
         super().__init__(nome, acao)
 
 
