@@ -78,6 +78,9 @@ class Jogador:
 
     def receber_dinheiro(self, valor: int):
         self.dinheiro += valor
+    
+    def enviar_dinheiro(self, valor: int):
+        self.dinheiro -= valor
 
     def construir_casa(self, imovel: Imovel):
         """Constrói uma casa em um imóvel."""

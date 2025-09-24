@@ -27,19 +27,22 @@ class Banco:
         print(f"Banco pagou $200 de salário para {jogador.nome}.")
         jogador.receber_dinheiro(200)
 
-    def hipotecar_imovel(self, imovel: Terreno):
+    def hipotecar_imovel(self, imovel: Terreno, jogador: Jogador):
         """
         Empresta dinheiro ao jogador com base no valor de hipoteca do imóvel.
         """
-        # Futuramente, adicionar verificação se o imóvel tem construções e fazer logica.
-        pass
+        jogador.receber_dinheiro(imovel.preco)
+        imovel.set_hipotecado(True)
+        # To-do: adicionar verificação se o imóvel tem construções e recalcular o preço da hipoteca se tiver
 
-    def resgatar_hipoteca(self, imovel: Terreno):
+    def resgatar_hipoteca(self, imovel: Terreno, jogador: Jogador):
         """
-        Recebe o pagamento do jogador para liberar a hipoteca de um imóvel.
+        Recebe o pagamento do jogador para liberar a hipoteca de um imóvel, ou seja, 
+        depois disso o imóvel não está mais hipotecado.
         A regra é o valor da hipoteca + 10% de juros.
         """
-        pass
+        jogador.enviar_dinheiro(imovel.preco * 1.1)
+        imovel.set_hipotecado(False)
 
     def iniciar_leilao(self, imovel: Terreno, jogadores: List[Jogador]):
         """
