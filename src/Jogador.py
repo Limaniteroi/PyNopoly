@@ -36,6 +36,7 @@ class Jogador:
         self.peca = peca
         self.dinheiro: int = 1500
         self.posicao: int = 0
+        self.lance_leilao: int = 0
 
         # Terrenos
         self.propriedades: List[Terreno] = []
@@ -78,6 +79,9 @@ class Jogador:
 
     def receber_dinheiro(self, valor: int):
         self.dinheiro += valor
+    
+    def enviar_dinheiro(self, valor: int):
+        self.dinheiro -= valor
 
     def construir_casa(self, imovel: Imovel):
         """Constrói uma casa em um imóvel, seguindo as regras do Monopoly."""
@@ -146,6 +150,18 @@ class Jogador:
             dados.append(random.randint(1, 6))
         print(f"Jogador {self}: tirou {dados} nos dados.")
         return dados
+    
+    def set_lance_leilao(self, valor: int):
+        self.lance_leilao = valor
+    
+    def comprar_imovel_leilao(self, imovel: Terreno, valor: int):
+        if self.dinheiro >= self.lance_leilao:
+            self.dinheiro -= self.lance_leilao
+            self.propriedades.append(imovel)
+            imovel.set_dono(self)
+            print(f"{self.peca} comprou {imovel.nome} por ${self.lance_leilao}.")
+        else:
+            print(f"{self.peca} não tem dinheiro para comprar {imovel.nome}.")
 
     @property
     def get_posicao(self):
