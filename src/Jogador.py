@@ -1,7 +1,8 @@
 from __future__ import annotations
 from typing import List
 from abc import ABC, abstractmethod
-from .Tabuleiro import Terreno, Imovel
+from .Terreno import Terreno
+from .Imovel import Imovel
 import random
 
 

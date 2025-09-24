@@ -1,9 +1,19 @@
 from abc import abstractmethod, ABC
 from typing import List
-from .Tabuleiro import (
-    Tabuleiro, CasaTabuleiro, PontoDePartida, Imovel, CasaCofre, Imposto, 
-    Estacao, CasaSorte, Cadeia, Companhia, EstacionamentoLivre, VaParaCadeia
-)
+from .Tabuleiro import Tabuleiro
+from .CasaTabuleiro import CasaTabuleiro
+from .PontoDePartida import PontoDePartida
+from .Imovel import Imovel
+from .CasaCofre import CasaCofre
+from .Imposto import Imposto
+from .Estacao import Estacao
+from .CasaSorte import CasaSorte
+from .Cadeia import Cadeia
+from .Companhia import Companhia
+from .EstacionamentoLivre import EstacionamentoLivre
+from .VaParaCadeia import VaParaCadeia
+
+
 class TabuleiroAbstractFactory(ABC):
     @abstractmethod
     def cria_tabuleiro(self) -> Tabuleiro:
