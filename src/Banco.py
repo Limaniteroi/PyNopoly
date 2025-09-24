@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import List, TYPE_CHECKING
+from Leilao import Leilao
 
 # Usamos TYPE_CHECKING para evitar importações circulares com Jogador e Terreno
 if TYPE_CHECKING:

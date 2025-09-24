@@ -3,14 +3,24 @@ from Jogador import Jogador
 from Terreno import Terreno
 
 class Leilao:
-    """
-    Representa o sistema de leilão. A lógica complexa de lances
-    sera implementada aqui.
-    """
 
     def realizar_leilao(self, imovel: Terreno, jogadores: List[Jogador]):
+        lance_minimo: int = 0,2 * imovel.preco
+        maior_lance: int = 0
+
         print(f"\n--- LEILÃO INICIADO PARA: {imovel.nome} ---")
-        # A lógica de receber lances dos jogadores e determinar o vencedor
-        # seria implementada neste método.
-        print("Leilão concluído.")
-        pass
+        
+        while (len(jogadores) > 1):
+            for i in range(len(jogadores)):
+                print(f"Jogando: {jogadores[i].peca}")
+                opt = int(input("\t1. Dar lance\n\t2.Desistir"))
+                if (opt == 1):
+                    jogadores[i].set_lance_leilao(int(input("Valor: ")))
+                    if (jogadores[i].lance_leilao >= lance_minimo & 
+                        jogadores[i].lance_leilao > maior_lance):
+                        maior_lance = jogadores[i].lance_leilao
+                else:
+                    jogadores.pop(i)
+
+        print(f"Leilão concluído. O vencedor foi: {jogadores[0]}")
+        jogadores[0].comprar_imovel_leilao(imovel, maior_lance)
