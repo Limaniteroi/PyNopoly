@@ -7,6 +7,8 @@ class Companhia(Terreno):
         self.hipoteca = hipoteca
 
     def calcular_aluguel(self, val_dados: int = 0) -> int:
+        if self.dono is None:
+            return 0
         companhias = [p for p in self.dono.propriedades if isinstance(p, Companhia)]
         quantidade = len(companhias)
         if quantidade == 1:
