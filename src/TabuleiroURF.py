@@ -98,7 +98,7 @@ class TabuleiroAleatorioFactory(ABC):
                 hipoteca=item['hipoteca']
             ))
 
-        for i in range(len(quantidade_casas_sorte_cofre)):
+        for i in range(quantidade_casas_sorte_cofre):
             todas_casas_moveis_selecionadas.append(CasaSorte(f"Sorte {i+1}", None))
             todas_casas_moveis_selecionadas.append(CasaCofre(f"Cofre {i+1}", None))
 
