@@ -3,16 +3,31 @@ from .Jogador import Jogador
 from typing import List
 
 class Imovel(Terreno):
-    def __init__(self, nome: str, posicao: int, preco: int, hipoteca: int, cor: str, alugueis: List[int], preco_casa: int):
+    def __init__(self, nome: str, posicao: int, preco: int, hipoteca: int, 
+                 cor: str, alugueis: List[int], preco_casa: int, hipotecado: bool = False):
         super().__init__(nome, posicao, preco, cor)
         self.hipoteca = hipoteca
         self.alugueis = alugueis
         self.casas = 0
         self.preco_casa = preco_casa
+        self.hipotecado = hipotecado  
     
     def calcular_aluguel(self, val_dados: int = 0) -> int:
-        # A lógica do aluguel foi simplificada para o teste
-        return 0
+        
+        # Se o imóvel está hipotecado, não cobra aluguel
+        if self.hipotecado
+            return 0
+        # Se não há casas, retorna aluguel básico
+        if self.casas == 0:
+            return self.alugueis[0]
+        # Se há casas, retorna aluguel correspondente
+        elif 1 <= self.casas <= 4:
+            return self.alugueis[self.casas]
+        # Se tem hotel (5 casas), retorna aluguel de hotel
+        elif self.casas == 5:
+            return self.alugueis[5]
+        else:
+            return 0  # Caso inválido
 
     def action(self, jogador: Jogador, val_dados: int = 0):
         pass
