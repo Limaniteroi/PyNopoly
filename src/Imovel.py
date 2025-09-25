@@ -11,8 +11,21 @@ class Imovel(Terreno):
         self.preco_casa = preco_casa
     
     def calcular_aluguel(self, val_dados: int = 0) -> int:
-        # A lógica do aluguel foi simplificada para o teste
-        return 0
+        
+        # Se o imóvel está hipotecado, não cobra aluguel
+        if hasattr(self, 'hipotecado') and self.hipotecado:
+            return 0
+        # Se não há casas, retorna aluguel básico
+        if self.casas == 0:
+            return self.alugueis[0]
+        # Se há casas, retorna aluguel correspondente
+        elif 1 <= self.casas <= 4:
+            return self.alugueis[self.casas]
+        # Se tem hotel (5 casas), retorna aluguel de hotel
+        elif self.casas == 5:
+            return self.alugueis[5]
+        else:
+            return 0  # Caso inválido
 
     def action(self, jogador: Jogador, val_dados: int = 0):
         pass
