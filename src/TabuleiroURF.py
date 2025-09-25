@@ -8,8 +8,8 @@ from .Tabuleiro import Tabuleiro
 from .PontoDePartida import PontoDePartida
 from .Cadeia import Cadeia
 from .Imovel import Imovel
-#from .CasaSorte import CasaSorte
-#from .CasaCofre import CasaCofre
+from .CasaSorte import CasaSorte
+from .CasaCofre import CasaCofre
 from .Estacao import Estacao
 from .Companhia import Companhia
 from .EstacionamentoLivre import EstacionamentoLivre
@@ -56,10 +56,8 @@ class TabuleiroAleatorioFactory(ABC):
         # Define a quantidades de casas variáveis
         quantidade_casas_moveis = 22
         quantidade_estacoes = 4
-        quantidade_companhias = 2
-        #quantidade_casas_sorte = 3   
-        #quantidade_casas_cofre = 3   
-
+        quantidade_companhias = 2 
+        quantidade_casas_sorte_cofre = 3  # São 3 de cada tipo
 
         # Seleciona itens aleatórios de arquivos JSON
         path_imoveis_aleatorios = 'CasasAleatoriasImoveis.json'
@@ -69,7 +67,7 @@ class TabuleiroAleatorioFactory(ABC):
         imoveis_selecionados = selecionar_itens_aleatorios(path_imoveis_aleatorios, quantidade_casas_moveis)
         estacoes_selecionadas = selecionar_itens_aleatorios(path_estacoes_aleatorias, quantidade_estacoes)
         companhias_selecionadas = selecionar_itens_aleatorios(path_companhias_aleatorias, quantidade_companhias)
-
+        
 
         todas_casas_moveis_selecionadas = []
     
@@ -100,6 +98,10 @@ class TabuleiroAleatorioFactory(ABC):
                 hipoteca=item['hipoteca']
             ))
 
+        for i in range(len(quantidade_casas_sorte_cofre)):
+            todas_casas_moveis_selecionadas.append(CasaSorte(f"Sorte {i+1}", None))
+            todas_casas_moveis_selecionadas.append(CasaCofre(f"Cofre {i+1}", None))
+
         # Cria uma lista de todas as posições do tabuleiro (40 casas)
         casas_tabuleiro: List[CasaTabuleiro] = [None] * 40
         
@@ -116,6 +118,7 @@ class TabuleiroAleatorioFactory(ABC):
             posicao_aleatoria = posicoes_disponiveis[i]
             casa_movel.posicao = posicao_aleatoria
             casas_tabuleiro[posicao_aleatoria] = casa_movel
+
 
         # Retorna o tabuleiro completo
         return Tabuleiro(casas=casas_tabuleiro)
