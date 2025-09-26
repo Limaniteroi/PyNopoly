@@ -1,5 +1,9 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
 from .Terreno import Terreno
-from .Jogador import Jogador    
+
+if TYPE_CHECKING:
+    from ..Jogador import Jogador
 
 class Estacao(Terreno):
     def __init__(self, nome: str, posicao: int, preco: int, hipoteca: int):
@@ -22,5 +26,5 @@ class Estacao(Terreno):
         else:
             return 0
     
-    def action(self, jogador: Jogador, val_dados: int = 0):
+    def executar_acao(self, jogador: Jogador, val_dados: int = 0):
         pass

@@ -1,9 +1,11 @@
 from __future__ import annotations
-from typing import List
+from typing import List, TYPE_CHECKING
 from abc import ABC, abstractmethod
-from .Terreno import Terreno
 from .Imovel import Imovel
 import random
+
+if TYPE_CHECKING:
+    from .Tabuleiro.Terreno import Terreno
 
 
 class JogadorState(ABC):
@@ -19,9 +21,25 @@ class JogadorJogandoState(JogadorState):
 
 
 class JogadorPresoState(JogadorState):
+    def __init__(self):
+        self.turnos_preso = 0
+
     def executar_acao_do_turno(self, jogador: Jogador):
         print(f"Estado de {jogador.peca}: Preso. Tentando sair da cadeia...")
-        # Lógica de tentar rolar dupla, pagar ou usar carta.
+        self.turnos_preso += 1
+        dados = jogador.lancar_dados()
+        if dados[0] == dados[1]:
+            print(f"{jogador.peca} tirou dados iguais e saiu da prisão!")
+            jogador.mudar_estado(JogadorJogandoState())
+            return dados
+        elif self.turnos_preso >= 3:
+            print(f"{jogador.peca} pagou para sair da prisão.")
+            jogador.enviar_dinheiro(50)
+            jogador.mudar_estado(JogadorJogandoState())
+            return dados
+        else:
+            print(f"{jogador.peca} não saiu da prisão.")
+            return None
 
 
 class JogadorFalidoState(JogadorState):
@@ -32,10 +50,11 @@ class JogadorFalidoState(JogadorState):
 
 
 class Jogador:
-    def __init__(self, peca: str):
+    def __init__(self, peca: str, nome: str):
         self.peca = peca
+        self.nome = nome
         self.dinheiro: int = 1500
-        self.posicao: int = 0
+        self._posicao: int = 0
         self.lance_leilao: int = 0
 
         # Terrenos
@@ -49,7 +68,7 @@ class Jogador:
         Este método aplica o Padrão de Projeto State, delegando a ação
         para o objeto de estado atual do jogador.
         """
-        self.estado_atual.executar_acao_do_turno(self)
+        return self.estado_atual.executar_acao_do_turno(self)
 
     def mover(self, passos: int):
         # O operador % 40 garante que o tabuleiro seja circular (posições 0 a 39)
@@ -88,7 +107,9 @@ class Jogador:
         print(f"{self.peca} tentando construir casa em {imovel.nome}...")
 
         # 1. Verificar se o jogador tem o monopólio da cor do imóvel.
-        # Will be implemented later
+        if not self.tem_monopolio(imovel.cor):
+            print(f"{self.peca} não tem o monopólio da cor {imovel.cor}.")
+            return
 
         # Get all properties of the color the player owns
         propriedades_da_cor = [p for p in self.propriedades if isinstance(p, Imovel) and p.cor == imovel.cor]
@@ -123,6 +144,18 @@ class Jogador:
         else:
             print(f"{self.peca} construiu uma casa em {imovel.nome} por ${custo}. Total de casas: {imovel.casas}.")
 
+    def tem_monopolio(self, cor: str) -> bool:
+        propriedades_da_cor = [p for p in self.propriedades if isinstance(p, Imovel) and p.cor == cor]
+        return len(propriedades_da_cor) == self.contar_propriedades_da_cor(cor)
+
+    def contar_propriedades_da_cor(self, cor: str) -> int:
+        # Esta função deveria, na verdade, consultar o tabuleiro para saber quantas propriedades de uma cor existem.
+        # Hardcoding por enquanto.
+        if cor in ["Marrom", "Azul-Escuro"]:
+            return 2
+        else:
+            return 3
+
     def calcular_valor_total(self) -> int:
         valor_total = self.dinheiro
         for propriedade in self.propriedades:
@@ -148,21 +181,25 @@ class Jogador:
         dados = []
         for _ in range(2):
             dados.append(random.randint(1, 6))
-        print(f"Jogador {self}: tirou {dados} nos dados.")
+        print(f"Jogador {self.peca}: tirou {dados} nos dados.")
         return dados
     
     def set_lance_leilao(self, valor: int):
         self.lance_leilao = valor
     
     def comprar_imovel_leilao(self, imovel: Terreno, valor: int):
-        if self.dinheiro >= self.lance_leilao:
-            self.dinheiro -= self.lance_leilao
+        if self.dinheiro >= valor:
+            self.dinheiro -= valor
             self.propriedades.append(imovel)
             imovel.set_dono(self)
-            print(f"{self.peca} comprou {imovel.nome} por ${self.lance_leilao}.")
+            print(f"{self.peca} comprou {imovel.nome} por ${valor}.")
         else:
             print(f"{self.peca} não tem dinheiro para comprar {imovel.nome}.")
 
     @property
-    def get_posicao(self):
-        return self.posicao
+    def posicao(self):
+        return self._posicao
+
+    @posicao.setter
+    def posicao(self, value):
+        self._posicao = value
