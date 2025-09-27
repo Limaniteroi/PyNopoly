@@ -5,8 +5,8 @@ import unittest
 # Add the project root to sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
-from src.Partida import Partida
-from src.Fabricas import TabuleiroPadraoFactory
+from src.engine.Partida import Partida
+from src.engine.Fabricas import TabuleiroPadraoFactory
 
 class TestIntegracao(unittest.TestCase):
 
