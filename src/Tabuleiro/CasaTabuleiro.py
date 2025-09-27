@@ -1,5 +1,10 @@
-from .Jogador import Jogador
+from __future__ import annotations
+from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
+
+if TYPE_CHECKING:
+    from ..Jogador import Jogador
+
 
 class CasaTabuleiro(ABC):
     def __init__(self, nome: str, pos: int):
@@ -7,5 +12,5 @@ class CasaTabuleiro(ABC):
         self.pos = pos
 
     @abstractmethod
-    def action(self, jogador: Jogador, val_dados: int = 0):
+    def executar_acao(self, jogador: Jogador, val_dados: int = 0):
         pass

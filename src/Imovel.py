@@ -1,6 +1,9 @@
-from .Terreno import Terreno
-from .Jogador import Jogador
-from typing import List
+from __future__ import annotations
+from typing import List, TYPE_CHECKING
+from .Tabuleiro.Terreno import Terreno
+
+if TYPE_CHECKING:
+    from .Jogador import Jogador
 
 class Imovel(Terreno):
     def __init__(self, nome: str, posicao: int, preco: int, hipoteca: int, 
@@ -15,7 +18,7 @@ class Imovel(Terreno):
     def calcular_aluguel(self, val_dados: int = 0) -> int:
         
         # Se o imóvel está hipotecado, não cobra aluguel
-        if self.hipotecado
+        if self.hipotecado:
             return 0
         # Se não há casas, retorna aluguel básico
         if self.casas == 0:
@@ -29,5 +32,8 @@ class Imovel(Terreno):
         else:
             return 0  # Caso inválido
 
-    def action(self, jogador: Jogador, val_dados: int = 0):
+    def set_hipotecado(self, hipotecado: bool):
+        self.hipotecado = hipotecado
+
+    def executar_acao(self, jogador: Jogador, val_dados: int = 0):
         pass

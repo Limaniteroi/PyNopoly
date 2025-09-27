@@ -1,10 +1,12 @@
 from __future__ import annotations
-from typing import List
+from typing import List, TYPE_CHECKING
 import random
-from .Jogador import Jogador
+from .Jogador import Jogador, JogadorFalidoState
 from .Fabricas import TabuleiroAbstractFactory, TabuleiroPadraoFactory
 from .Banco import Banco
-from .Tabuleiro import Tabuleiro
+
+if TYPE_CHECKING:
+    from .Tabuleiro.Tabuleiro import Tabuleiro
 
 
 class Partida:
@@ -20,7 +22,7 @@ class Partida:
         # GRASP CREATOR: A Partida cria os objetos que ela agrega e usa intensamente.
         self.banco = Banco()
         self.tabuleiro = factory.criar_tabuleiro()
-        self.jogadores = [Jogador(peca) for peca in pecas_jogadores]
+        self.jogadores = [Jogador(peca, f"Jogador {i+1}") for i, peca in enumerate(pecas_jogadores)]
 
         # Atributos para controlar o estado do jogo
         self.jogador_atual_idx: int = 0
@@ -41,38 +43,40 @@ class Partida:
     def jogar_rodada(self):
         """Executa um turno completo para o jogador atual."""
 
-        #Não sei se esse if seria necessário, conferir dps
         if not self.em_andamento:
             print("O jogo já terminou!")
             return
 
         jogador_da_vez = self.jogadores[self.jogador_atual_idx]
 
-        # O método jogar_round do jogador lida com a lógica de estado (preso ou jogando)
-        # e retorna o valor dos dados.
         valor_dados = jogador_da_vez.jogar_round()
 
-        if valor_dados > 0:
+        if valor_dados is not None:
             posicao_anterior = jogador_da_vez.posicao
             jogador_da_vez.mover(sum(valor_dados))
 
-            # Lógica para pagar salário ao passar pelo Ponto de Partida
             if jogador_da_vez.posicao < posicao_anterior:
                 print(f"{jogador_da_vez.peca} completou uma volta!")
                 self.banco.pagar_salario(jogador_da_vez)
 
-            # Obtém a casa onde o jogador parou e executa sua ação
             casa_atual = self.tabuleiro.get_casa_na_posicao(jogador_da_vez.posicao)
-            casa_atual.executar_acao(jogador_da_vez, valor_dados)
+            if casa_atual:
+                casa_atual.executar_acao(jogador_da_vez, sum(valor_dados))
 
-        # Lógica para verificar se o jogo acabou
         self.verificar_fim_de_jogo()
-
-        # Passa a vez para o próximo jogador
         self.proximo_jogador()
 
     def proximo_jogador(self):
         """Avança o turno para o próximo jogador na lista."""
         self.jogador_atual_idx = (self.jogador_atual_idx + 1) % len(self.jogadores)
         print("-" * 25)
+
+    def verificar_fim_de_jogo(self):
+        """Verifica se o jogo terminou (se resta apenas um jogador não falido)."""
+        jogadores_ativos = [j for j in self.jogadores if not isinstance(j.estado_atual, JogadorFalidoState)]
+        if len(jogadores_ativos) <= 1:
+            self.em_andamento = False
+            print("\n--- FIM DE JOGO! ---")
+            if jogadores_ativos:
+                print(f"O vencedor é {jogadores_ativos[0].peca}!")
 

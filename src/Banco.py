@@ -1,11 +1,11 @@
 from __future__ import annotations
 from typing import List, TYPE_CHECKING
-from Leilao import Leilao
+from .Leilao import Leilao
 
 # Usamos TYPE_CHECKING para evitar importações circulares com Jogador e Terreno
 if TYPE_CHECKING:
     from .Jogador import Jogador
-    from .Terreno import Terreno
+    from .Tabuleiro.Terreno import Terreno
 
 class Banco:
     def __init__(self):
@@ -15,16 +15,16 @@ class Banco:
         self._leilao = Leilao()
 
     @property
-    def get_casas_disponiveis(self) -> int:
+    def casas_disponiveis(self) -> int:
         return self._casas_disponiveis
 
     @property
-    def get_hoteis_disponiveis(self) -> int:
+    def hoteis_disponiveis(self) -> int:
         return self._hoteis_disponiveis
 
     def pagar_salario(self, jogador: Jogador):
         """Paga o salário de $200 ao jogador por passar pelo Ponto de Partida."""
-        print(f"Banco pagou $200 de salário para {jogador.nome}.")
+        print(f"Banco pagou $200 de salário para {jogador.peca}.")
         jogador.receber_dinheiro(200)
 
     def hipotecar_imovel(self, imovel: Terreno, jogador: Jogador):

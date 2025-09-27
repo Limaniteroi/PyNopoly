@@ -1,25 +1,28 @@
+from __future__ import annotations
 from abc import abstractmethod, ABC
-from typing import List
-from .Tabuleiro import Tabuleiro
-from .CasaTabuleiro import CasaTabuleiro
-from .PontoDePartida import PontoDePartida
+from typing import List, TYPE_CHECKING
+from .Tabuleiro.Tabuleiro import Tabuleiro
+from .Tabuleiro.CasaTabuleiro import CasaTabuleiro
+from .Tabuleiro.PontoDePartida import PontoDePartida
 from .Imovel import Imovel
-from .CasaCofre import CasaCofre
+from .Tabuleiro.CasaCofre import CasaCofre
 from .Imposto import Imposto
-from .Estacao import Estacao
-from .CasaSorte import CasaSorte
-from .Cadeia import Cadeia
-from .Companhia import Companhia
-from .EstacionamentoLivre import EstacionamentoLivre
-from .VaParaCadeia import VaParaCadeia
+from .Tabuleiro.Estacao import Estacao
+from .Tabuleiro.CasaSorte import CasaSorte
+from .Tabuleiro.Cadeia import Cadeia
+from .Tabuleiro.Companhia import Companhia
+from .Tabuleiro.EstacionamentoLivre import EstacionamentoLivre
+from .Tabuleiro.VaParaCadeia import VaParaCadeia
 
+if TYPE_CHECKING:
+    from .Jogador import Jogador
 
 class TabuleiroAbstractFactory(ABC):
     @abstractmethod
-    def cria_tabuleiro(self) -> Tabuleiro:
+    def criar_tabuleiro(self) -> Tabuleiro:
         pass
 
-class TabuleiroPadraoFactory(ABC):
+class TabuleiroPadraoFactory(TabuleiroAbstractFactory):
     def criar_tabuleiro(self) -> Tabuleiro:
         casas: List[CasaTabuleiro] = []
 
