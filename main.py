@@ -4,7 +4,7 @@ import os
 from pygame._sdl2.video import Window, Renderer, Texture
 
 
-class Game:
+class Menu:
     def __init__(self):
         pygame.init()
 
@@ -18,10 +18,8 @@ class Game:
 
         #Load arts
         menu_surface = pygame.image.load(os.path.join('arts', 'menu_placeholder.jpeg'))
-
         #Converting intto textures
         self.menu_texture = Texture.from_surface(self.renderer, menu_surface)
-
         self.clock = pygame.time.Clock()
 
     def run(self):
@@ -40,5 +38,5 @@ class Game:
 
 
 if __name__ == "__main__":
-    game = Game()
+    game = Menu()
     game.run()
