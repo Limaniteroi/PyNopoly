@@ -51,7 +51,7 @@ class Partida:
 
         valor_dados = jogador_da_vez.jogar_round()
 
-        if valor_dados:
+        if valor_dados is not None:
             posicao_anterior = jogador_da_vez.posicao
             jogador_da_vez.mover(sum(valor_dados))
 
