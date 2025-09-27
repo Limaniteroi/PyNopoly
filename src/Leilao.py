@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 class Leilao:
 
     def realizar_leilao(self, imovel: Terreno, jogadores: List[Jogador]) -> None:
-        lance_minimo: int = 0.2 * imovel.preco
+        lance_minimo: int = int(0.2 * imovel.preco)
         maior_lance: int = 0
 
         print(f"\n--- LEILÃO INICIADO PARA: {imovel.nome} ---")
