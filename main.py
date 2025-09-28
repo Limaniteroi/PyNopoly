@@ -30,8 +30,12 @@ class Menu:
         self.menu_texture = Texture.from_surface(self.renderer, menu_surface)
         self.clock = pygame.time.Clock()
         
+        # Create start button image
+        button_image = pygame.image.load(os.path.join('arts', 'button_placeholder.jpg'))
+        button_image = pygame.transform.scale(button_image, (120, 40))
+
         # Create start button at specified position
-        self.start_button = Button(135, 416, 120, 40, "Start Game", self.start_game)
+        self.start_button = Button(135, 416, button_image, self.start_game)
     
     def start_game(self):
         """Callback function for the start button"""
