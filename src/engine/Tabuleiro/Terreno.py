@@ -1,10 +1,11 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING, List
 from .CasaTabuleiro import CasaTabuleiro
 
 if TYPE_CHECKING:
     from ..Jogador import Jogador
+    from ..Cartas import Baralho
 
 
 class Terreno(CasaTabuleiro, ABC):
@@ -22,5 +23,5 @@ class Terreno(CasaTabuleiro, ABC):
     def set_dono(self, jogador: Jogador):
         self.dono = jogador
 
-    def action(self, jogador: Jogador, val_dados: int = 0):
+    def executar_acao(self, jogador: Jogador, val_dados: int = 0, jogadores: List[Jogador] = None, baralho_sorte: Baralho = None, baralho_cofre: Baralho = None):
         pass
