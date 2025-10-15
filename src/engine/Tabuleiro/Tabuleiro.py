@@ -4,6 +4,7 @@ from typing import List, TYPE_CHECKING, Optional
 if TYPE_CHECKING:
     from .CasaTabuleiro import CasaTabuleiro
     from ..Jogador import Jogador
+    from ..Imovel import Imovel
 
 class Tabuleiro:
     def __init__(self, casas: List[CasaTabuleiro]):
@@ -13,3 +14,10 @@ class Tabuleiro:
         if 0 <= posicao < len(self.casas):
             return self.casas[posicao]
         return None
+    
+    def get_propriedades_da_cor(self, cor: str) -> int:
+        acumulador = 0
+        for casa in self.casas:
+            if isinstance(casa, Imovel) and casa.cor == cor:
+               acumulador += 1 
+        return acumulador

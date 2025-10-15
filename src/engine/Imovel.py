@@ -11,6 +11,7 @@ class Imovel(Terreno):
         super().__init__(nome, posicao, preco, cor)
         self.hipoteca = hipoteca
         self.alugueis = alugueis
+        self.cor = cor
         self.casas = 0
         self.preco_casa = preco_casa
         self.hipotecado = hipotecado  

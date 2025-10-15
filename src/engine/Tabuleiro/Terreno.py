@@ -1,6 +1,6 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
 from .CasaTabuleiro import CasaTabuleiro
 
 if TYPE_CHECKING:
@@ -11,8 +11,7 @@ class Terreno(CasaTabuleiro, ABC):
     def __init__(self, nome: str, pos: int, preco: int, cor: str):
         super().__init__(nome, pos)
         self.preco = preco
-        self.cor = cor
-        self.dono: Optional[Jogador] = None
+        self.dono = None
         self.hipotecado: bool = False
 
     @abstractmethod
