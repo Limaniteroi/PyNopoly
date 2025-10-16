@@ -1,6 +1,10 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
 from .Jogador import Jogador
+
+if TYPE_CHECKING:
+    from .Tabuleiro.Cadeia import Cadeia
 
 class Acao(ABC):
     @abstractmethod
@@ -36,16 +40,16 @@ class AcaoMoverCasas(Acao):
 # ir_para_cadeia, pagar_a_jogadores, ir_para_posicao
 
 class AcaoIrParaCadeia(Acao):
-    def executar(self, jogador: Jogador):
-        jogador.ir_para_cadeia()
+    def executar(self, jogador: Jogador, cadeia: Cadeia):
+        jogador.ir_para_cadeia(cadeia)
 
 
 class AcaoPagarJogadores(Acao):
     def __init__(self, valor: int):
         self._valor = valor
 
-    def executar(self, jogador: Jogador):
-        jogador.pagar_a_jogadores(self._valor)
+    def executar(self, jogador_paga: Jogador, jogador_recebe: Jogador):
+        jogador_paga.pagar_a_jogadores(self._valor, jogador_recebe)
 
 
 class AcaoSaiaDaCadeia(Acao):

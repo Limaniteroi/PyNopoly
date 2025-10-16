@@ -5,8 +5,9 @@ from .Imovel import Imovel
 import random
 
 if TYPE_CHECKING:
-    from .Tabuleiro.Terreno import Terreno
     from .Tabuleiro.Tabuleiro import Tabuleiro
+    from .Tabuleiro.Terreno import Terreno
+    from .Tabuleiro.Cadeia import Cadeia
 
 
 class JogadorState(ABC):
@@ -188,6 +189,17 @@ class Jogador:
             print(f"{self.peca} comprou {imovel.nome} por ${valor}.")
         else:
             print(f"{self.peca} não tem dinheiro para comprar {imovel.nome}.")
+
+    def ir_para_cadeia(self, cadeia: Cadeia):
+        self.posicao = cadeia.pos
+        self.estado_atual = JogadorPresoState()
+
+    def pagar_a_jogadores(self, valor, jogador_recebe: Jogador):
+        self.dinheiro -= valor
+        jogador_recebe.dinheiro += valor
+
+    def ir_para_posicao(self, posicao: int):
+        self.posicao = posicao
 
     @property
     def posicao(self):
