@@ -12,20 +12,22 @@ class Carta(ABC):
         self.acao = acao  
         self.tipo = tipo
 
-    def executar_acao(self, jogador: Jogador):
+    def executar_acao(self, jogador: Jogador, jogadores: List[Jogador] = None):
 
         cartas_sorte = [] # TO DO adicionar os pngs
         cartas_azar = [] # TO DO Adicionar os pngs
 
         if self.tipo == 'Sorte':
-            selecionando_png_sorte = random.choice(cartas_sorte)
-            print(f"Mostrando imagem: {selecionando_png_sorte}")
+            #selecionando_png_sorte = random.choice(cartas_sorte)
+            #print(f"Mostrando imagem: {selecionando_png_sorte}")
+            pass
         else:
-            selecionando_png_azar = random.choice(cartas_azar)
-            print(f"Mostrando imagem: {selecionando_png_azar}")
+            #selecionando_png_azar = random.choice(cartas_azar)
+            #print(f"Mostrando imagem: {selecionando_png_azar}")
+            pass
 
         print(f"Carta tirada: '{self.nome}'")
-        self.acao.executar(jogador)
+        self.acao.executar(jogador, jogadores)
 
 
 class Baralho:
@@ -97,15 +99,16 @@ def gerar_baralho(total_de_cartas: int) -> Baralho:
 # Modifiquei a lógica um pouco
 if __name__ == "__main__":
     baralho_sorte = gerar_baralho(10)
-    jogador_teste = Jogador("Fernando")
+    jogadores_teste = [Jogador("Fernando", "Jogador 1"), Jogador("Luiza", "Jogador 2")]
 
     print("--- Simulação de turnos com cartas aleatórias ---")
     for i in range(5):
         print(f"\n--- Turno {i+1} ---")
+        jogador_da_vez = jogadores_teste[i % len(jogadores_teste)]
         carta_puxada = baralho_sorte.tirar_carta()
         
         # A lógica para decidir qual PNG exibir está agora dentro da própria carta,
         # no método `executar_acao`.
-        carta_puxada.executar_acao(jogador_teste)
+        carta_puxada.executar_acao(jogador_da_vez, jogadores_teste)
         
         baralho_sorte.devolver_carta(carta_puxada)
