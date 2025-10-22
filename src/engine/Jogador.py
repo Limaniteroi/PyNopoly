@@ -1,11 +1,13 @@
 from __future__ import annotations
-from typing import List, TYPE_CHECKING
+from typing import List, TYPE_CHECKING, Optional
 from abc import ABC, abstractmethod
 from .Imovel import Imovel
 from .Dados import Dados
 
 if TYPE_CHECKING:
+    from .Tabuleiro.Tabuleiro import Tabuleiro
     from .Tabuleiro.Terreno import Terreno
+    from .Tabuleiro.Cadeia import Cadeia
 
 
 class JogadorState(ABC):
@@ -109,12 +111,12 @@ class Jogador:
     def enviar_dinheiro(self, valor: int):
         self.dinheiro -= valor
 
-    def construir_casa(self, imovel: Imovel):
+    def construir_casa(self, imovel: Imovel, tabuleiro: Tabuleiro):
         """Constrói uma casa em um imóvel, seguindo as regras do Monopoly."""
         print(f"{self.peca} tentando construir casa em {imovel.nome}...")
 
         # 1. Verificar se o jogador tem o monopólio da cor do imóvel.
-        if not self.tem_monopolio(imovel.cor):
+        if not self.tem_monopolio(imovel.cor, tabuleiro):
             print(f"{self.peca} não tem o monopólio da cor {imovel.cor}.")
             return
 
@@ -151,17 +153,9 @@ class Jogador:
         else:
             print(f"{self.peca} construiu uma casa em {imovel.nome} por ${custo}. Total de casas: {imovel.casas}.")
 
-    def tem_monopolio(self, cor: str) -> bool:
+    def tem_monopolio(self, cor: str, tabuleiro: Tabuleiro) -> bool:
         propriedades_da_cor = [p for p in self.propriedades if isinstance(p, Imovel) and p.cor == cor]
-        return len(propriedades_da_cor) == self.contar_propriedades_da_cor(cor)
-
-    def contar_propriedades_da_cor(self, cor: str) -> int:
-        # Esta função deveria, na verdade, consultar o tabuleiro para saber quantas propriedades de uma cor existem.
-        # Hardcoding por enquanto.
-        if cor in ["Marrom", "Azul-Escuro"]:
-            return 2
-        else:
-            return 3
+        return len(propriedades_da_cor) == tabuleiro.get_propriedades_da_cor(cor)
 
     def calcular_valor_total(self) -> int:
         valor_total = self.dinheiro
@@ -200,7 +194,9 @@ class Jogador:
         self.posicao = 10
         self.mudar_estado(JogadorPresoState())
 
-    def pagar_a_jogadores(self, jogadores: List[Jogador], valor: int):
+    def pagar_a_jogadores(self, jogadores: Optional[List[Jogador]], valor: int):
+        if jogadores == None:
+            return
         for jogador in jogadores:
             if jogador is not self:
                 self.pagar_aluguel(jogador, valor)
