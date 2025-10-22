@@ -4,13 +4,11 @@ from typing import List, TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from .Jogador import Jogador
-
-if TYPE_CHECKING:
     from .Tabuleiro.Cadeia import Cadeia
 
 class Acao(ABC):
     @abstractmethod
-    def executar(self, jogador: Jogador, jogadores: Optional[Optional[List[Jogador]]] = None):
+    def executar(self, jogador: Jogador, jogadores: Optional[List[Jogador]] = None):
         pass
 
 
