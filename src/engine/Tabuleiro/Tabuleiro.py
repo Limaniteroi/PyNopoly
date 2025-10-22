@@ -19,5 +19,5 @@ class Tabuleiro:
         acumulador = 0
         for casa in self.casas:
             if isinstance(casa, Imovel) and casa.cor == cor:
-               acumulador += 1 
+                acumulador += 1 
         return acumulador
