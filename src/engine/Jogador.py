@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, TYPE_CHECKING
+from typing import List, TYPE_CHECKING, Optional
 from abc import ABC, abstractmethod
 from .Imovel import Imovel
 from .Dados import Dados
@@ -194,7 +194,9 @@ class Jogador:
         self.posicao = 10
         self.mudar_estado(JogadorPresoState())
 
-    def pagar_a_jogadores(self, jogadores: List[Jogador], valor: int):
+    def pagar_a_jogadores(self, jogadores: Optional[List[Jogador]], valor: int):
+        if jogadores == None:
+            return
         for jogador in jogadores:
             if jogador is not self:
                 self.pagar_aluguel(jogador, valor)
