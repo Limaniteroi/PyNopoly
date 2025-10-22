@@ -4,6 +4,7 @@ import random
 from .Jogador import Jogador, JogadorFalidoState
 from .Fabricas import TabuleiroAbstractFactory, TabuleiroPadraoFactory
 from .Banco import Banco
+from .Cartas import Baralho, gerar_baralho
 
 if TYPE_CHECKING:
     from .Tabuleiro.Tabuleiro import Tabuleiro
@@ -23,6 +24,8 @@ class Partida:
         self.banco = Banco()
         self.tabuleiro = factory.criar_tabuleiro()
         self.jogadores = [Jogador(peca, f"Jogador {i+1}") for i, peca in enumerate(pecas_jogadores)]
+        self.baralho_sorte = gerar_baralho(10)
+        self.baralho_cofre = gerar_baralho(10)
 
         # Atributos para controlar o estado do jogo
         self.jogador_atual_idx: int = 0
@@ -61,7 +64,7 @@ class Partida:
 
             casa_atual = self.tabuleiro.get_casa_na_posicao(jogador_da_vez.posicao)
             if casa_atual:
-                casa_atual.executar_acao(jogador_da_vez, sum(valor_dados))
+                casa_atual.executar_acao(jogador_da_vez, sum(valor_dados), self.jogadores, self.baralho_sorte, self.baralho_cofre)
 
         self.verificar_fim_de_jogo()
         self.proximo_jogador()

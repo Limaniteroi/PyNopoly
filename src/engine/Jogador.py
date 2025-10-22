@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import List, TYPE_CHECKING
 from abc import ABC, abstractmethod
 from .Imovel import Imovel
-import random
+from .Dados import Dados
 
 if TYPE_CHECKING:
     from .Tabuleiro.Tabuleiro import Tabuleiro
@@ -19,7 +19,7 @@ class JogadorState(ABC):
 class JogadorJogandoState(JogadorState):
     def executar_acao_do_turno(self, jogador: Jogador):
         print(f"Estado de {jogador.peca}: Jogando Normalmente. Rolando dados...")
-        return jogador.lancar_dados() # Retorna os dados para usar pelo pygame
+        return jogador.dados.lancar() # Retorna os dados para usar pelo pygame
 
 
 class JogadorPresoState(JogadorState):
@@ -28,8 +28,14 @@ class JogadorPresoState(JogadorState):
 
     def executar_acao_do_turno(self, jogador: Jogador):
         print(f"Estado de {jogador.peca}: Preso. Tentando sair da cadeia...")
+        if jogador.cartas > 0:
+            jogador.cartas -= 1
+            print(f"{jogador.peca} usou uma carta de 'Saia da Cadeia' e está livre!")
+            jogador.mudar_estado(JogadorJogandoState())
+            return jogador.dados.lancar()
+
         self.turnos_preso += 1
-        dados = jogador.lancar_dados()
+        dados = jogador.dados.lancar()
         if dados[0] == dados[1]:
             print(f"{jogador.peca} tirou dados iguais e saiu da prisão!")
             jogador.mudar_estado(JogadorJogandoState())
@@ -58,6 +64,7 @@ class Jogador:
         self.dinheiro: int = 1500
         self._posicao: int = 0
         self.lance_leilao: int = 0
+        self.dados = Dados()
 
         # Terrenos
         self.propriedades: List[Terreno] = []
@@ -169,14 +176,6 @@ class Jogador:
     def mudar_estado(self, novo_estado: JogadorState):
         """Altera o objeto de estado do jogador."""
         self.estado_atual = novo_estado
-
-    #Talvez vá para classe dado????
-    def lancar_dados(self):
-        dados = []
-        for _ in range(2):
-            dados.append(random.randint(1, 6))
-        print(f"Jogador {self.peca}: tirou {dados} nos dados.")
-        return dados
     
     def set_lance_leilao(self, valor: int):
         self.lance_leilao = valor
@@ -190,16 +189,22 @@ class Jogador:
         else:
             print(f"{self.peca} não tem dinheiro para comprar {imovel.nome}.")
 
-    def ir_para_cadeia(self, cadeia: Cadeia):
-        self.posicao = cadeia.pos
-        self.estado_atual = JogadorPresoState()
+    def ir_para_cadeia(self):
+        print(f"{self.peca} foi para a cadeia!")
+        self.posicao = 10
+        self.mudar_estado(JogadorPresoState())
 
-    def pagar_a_jogadores(self, valor, jogador_recebe: Jogador):
-        self.dinheiro -= valor
-        jogador_recebe.dinheiro += valor
+    def pagar_a_jogadores(self, jogadores: List[Jogador], valor: int):
+        for jogador in jogadores:
+            if jogador is not self:
+                self.pagar_aluguel(jogador, valor)
 
     def ir_para_posicao(self, posicao: int):
         self.posicao = posicao
+
+    def receber_carta_saia_da_cadeia(self):
+        self.cartas += 1
+        print(f"{self.peca} recebeu uma carta de 'Saia da Cadeia'.")
 
     @property
     def posicao(self):
