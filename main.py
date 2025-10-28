@@ -1,7 +1,7 @@
 import pygame
 import sys
 import os
-from pygame._sdl2.video import Window, Renderer, Texture
+from pygame._sdl2.video import Window, Renderer, Texture, Image
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "src")))
 
@@ -20,8 +20,8 @@ class Menu:
             pygame.quit()
             exit()
 
-        # Load arts
-        menu_surface = pygame.image.load(os.path.join("assets", "bg-placeholder.jpeg"))
+        # Load menu background
+        self.menu_surface = pygame.image.load(os.path.join("arts", "menu_placeholder.jpeg"))
 
         # Create a working surface for drawing buttons
         self.working_surface = menu_surface.copy()
@@ -75,7 +75,8 @@ class Menu:
             self.exit_button.update_hover(mouse_pos)
 
             # Prepare the surface with menu background
-            menu_surface = pygame.image.load(
+            menu_surface = self.menu_surface.copy()
+
             title_rect = self.title.get_rect(center=(1280 // 2, 200))
             menu_surface.blit(self.title, title_rect)
 
@@ -83,7 +84,6 @@ class Menu:
             self.start_button.draw_to_surface(menu_surface)
             self.credits_button.draw_to_surface(menu_surface)
             self.exit_button.draw_to_surface(menu_surface)
-
 
             # Convert surface to texture and render
             self.menu_texture = Texture.from_surface(self.renderer, menu_surface)
