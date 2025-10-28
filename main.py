@@ -21,26 +21,33 @@ class Menu:
             exit()
 
         # Load arts
-        menu_surface = pygame.image.load(os.path.join("arts", "menu_placeholder.jpeg"))
+        menu_surface = pygame.image.load(os.path.join("assets", "bg-placeholder.jpeg"))
 
         # Create a working surface for drawing buttons
         self.working_surface = menu_surface.copy()
 
-        # Converting into textures
+        # Converting surface into texture
         self.menu_texture = Texture.from_surface(self.renderer, menu_surface)
         self.clock = pygame.time.Clock()
 
-        # Create start button image
-        button_image = pygame.image.load(os.path.join("arts", "button_placeholder.jpg"))
-        button_image = pygame.transform.scale(button_image, (120, 40))
+        # Load button images
+        start_button_image = pygame.image.load(os.path.join("assets", "botao-jogar.png"))
+        credits_button_image = pygame.image.load(os.path.join("assets", "botao-creditos.png"))
+        exit_button_image = pygame.image.load(os.path.join("assets", "botao-sair.png"))
 
-        # Create start button at specified position
-        self.start_button = Button(135, 416, button_image, self.start_game)
+        # Create buttons at specified position
+        self.start_button = Button(524, 375, start_button_image, self.start_game)
+        self.credits_button = Button(524, 465, credits_button_image, self.show_credits)
+        self.exit_button = Button(524, 555, exit_button_image, self.exit_game)
 
     def start_game(self):
-        """Callback function for the start button"""
-        # Isso aqui sera removideo depois e iremos importar a funcao do jogo msm
         print("game started")
+    
+    def show_credits(self):
+        print("tela de créditos")
+    
+    def exit_game(self):
+        print("saindo do jogo")
 
     def run(self):
         while True:
@@ -53,20 +60,27 @@ class Menu:
 
                 # Handle button events
                 self.start_button.handle_event(event)
+                self.credits_button.handle_event(event)
+                self.exit_button.handle_event(event)
 
                 if event.type == pygame.KEYDOWN:
                     pass
 
-            # Update button hover state
+            # Update button hover states
             self.start_button.update_hover(mouse_pos)
+            self.credits_button.update_hover(mouse_pos)
+            self.exit_button.update_hover(mouse_pos)
 
             # Prepare the surface with menu background
             menu_surface = pygame.image.load(
                 os.path.join("arts", "menu_placeholder.jpeg")
             )
 
-            # Draw button on the surface
+            # Draw buttons on the surface
             self.start_button.draw_to_surface(menu_surface)
+            self.credits_button.draw_to_surface(menu_surface)
+            self.exit_button.draw_to_surface(menu_surface)
+
 
             # Convert surface to texture and render
             self.menu_texture = Texture.from_surface(self.renderer, menu_surface)
