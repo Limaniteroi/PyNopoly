@@ -35,6 +35,9 @@ class Menu:
         credits_button_image = pygame.image.load(os.path.join("assets", "botao-creditos.png"))
         exit_button_image = pygame.image.load(os.path.join("assets", "botao-sair.png"))
 
+        # Load title
+        self.title = pygame.image.load(os.path.join("assets", "titulo.png"))
+
         # Create buttons at specified position
         self.start_button = Button(524, 375, start_button_image, self.start_game)
         self.credits_button = Button(524, 465, credits_button_image, self.show_credits)
@@ -73,8 +76,8 @@ class Menu:
 
             # Prepare the surface with menu background
             menu_surface = pygame.image.load(
-                os.path.join("arts", "menu_placeholder.jpeg")
-            )
+            title_rect = self.title.get_rect(center=(1280 // 2, 200))
+            menu_surface.blit(self.title, title_rect)
 
             # Draw buttons on the surface
             self.start_button.draw_to_surface(menu_surface)
