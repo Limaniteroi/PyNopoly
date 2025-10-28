@@ -79,7 +79,8 @@ class Menu:
             self.clock.tick(60)
     
     def exit_game(self):
-        print("saindo do jogo")
+        pygame.quit()
+        sys.exit()
 
     def run(self):
         while True:
