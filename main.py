@@ -24,10 +24,10 @@ class Menu:
         self.menu_surface = pygame.image.load(os.path.join("arts", "menu_placeholder.jpeg"))
 
         # Create a working surface for drawing buttons
-        self.working_surface = menu_surface.copy()
+        self.working_surface = self.menu_surface.copy()
 
         # Converting surface into texture
-        self.menu_texture = Texture.from_surface(self.renderer, menu_surface)
+        self.menu_texture = Texture.from_surface(self.renderer, self.menu_surface)
         self.clock = pygame.time.Clock()
 
         # Load button images
