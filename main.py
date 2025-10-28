@@ -21,7 +21,8 @@ class Menu:
             exit()
 
         # Load menu background
-        self.menu_surface = pygame.image.load(os.path.join("arts", "menu_placeholder.jpeg"))
+        self.menu_surface = pygame.image.load(os.path.join("assets", "bg-placeholder.jpeg"))
+        self.menu_surface = pygame.transform.scale(self.menu_surface, (1280, 720))
 
         # Create a working surface for drawing buttons
         self.working_surface = self.menu_surface.copy()
