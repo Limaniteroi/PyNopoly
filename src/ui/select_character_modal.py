@@ -10,6 +10,7 @@ class SelectCharacterModal(Modal):
         super().__init__(x, y, modal_surface, modal_image, renderer, clock)
         self.character_cards = {}
         self.create_character_cards()
+        self.selected_character = None
     
     def create_character_cards(self):
         assets_dir = os.path.join("assets", "characters")
@@ -36,7 +37,12 @@ class SelectCharacterModal(Modal):
                 x, y,
                 normal_img,
                 hover_img,
+                callback=lambda n=name: self.select_character(n)
             )
+
+    def select_character(self, name):
+        print(f"Personagem selecionado: {name}")
+        self.selected_character = name
 
     def show(self):
         showing = True
