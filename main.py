@@ -1,11 +1,14 @@
 import pygame
 import sys
 import os
-from pygame._sdl2.video import Window, Renderer, Texture
+from pygame._sdl2.video import Window, Renderer, Texture, Image
+
+from src.ui.credits_modal import CreditsModal
+from src.ui.select_character_modal import SelectCharacterModal
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "src")))
 
-from ui.button import Button
+from src.ui.button import Button
 
 
 class Menu:
@@ -20,27 +23,54 @@ class Menu:
             pygame.quit()
             exit()
 
-        # Load arts
-        menu_surface = pygame.image.load(os.path.join("arts", "menu_placeholder.jpeg"))
+        # Load menu background
+        self.menu_surface = pygame.image.load(os.path.join("assets", "bg-placeholder.jpeg"))
+        self.menu_surface = pygame.transform.scale(self.menu_surface, (1280, 720))
 
         # Create a working surface for drawing buttons
-        self.working_surface = menu_surface.copy()
+        self.working_surface = self.menu_surface.copy()
 
-        # Converting into textures
-        self.menu_texture = Texture.from_surface(self.renderer, menu_surface)
+        # Converting surface into texture
+        self.menu_texture = Texture.from_surface(self.renderer, self.menu_surface)
         self.clock = pygame.time.Clock()
 
-        # Create start button image
-        button_image = pygame.image.load(os.path.join("arts", "button_placeholder.jpg"))
-        button_image = pygame.transform.scale(button_image, (120, 40))
+        # Load button images
+        start_button_image = pygame.image.load(os.path.join("assets", "botao-jogar.png"))
+        credits_button_image = pygame.image.load(os.path.join("assets", "botao-creditos.png"))
+        exit_button_image = pygame.image.load(os.path.join("assets", "botao-sair.png"))
 
-        # Create start button at specified position
-        self.start_button = Button(135, 416, button_image, self.start_game)
+        # Load modal images
+        credits_image = pygame.image.load(os.path.join("assets", "modal-creditos.png"))
+        select_character_image = pygame.image.load(os.path.join(
+            "assets", "modal-selecao-personagem.png"))
+        
+        # Create modals
+        credits_modal = CreditsModal(240, 86, 
+                                     self.menu_surface.copy(), 
+                                     credits_image, 
+                                     self.renderer,
+                                     self.clock)
+        # Mudar isso pro início do jogo no futuro, por enquanto está aqui só pra testar
+        select_character_modal = SelectCharacterModal(240, 120,
+                                                      self.menu_surface.copy(),
+                                                      select_character_image,
+                                                      self.renderer,
+                                                      self.clock)
+
+        # Load title
+        self.title = pygame.image.load(os.path.join("assets", "titulo.png"))
+
+        # Create buttons at specified position
+        self.start_button = Button(524, 375, start_button_image, select_character_modal.show)
+        self.credits_button = Button(524, 465, credits_button_image, credits_modal.show)
+        self.exit_button = Button(524, 555, exit_button_image, self.exit_game)
 
     def start_game(self):
-        """Callback function for the start button"""
-        # Isso aqui sera removideo depois e iremos importar a funcao do jogo msm
-        print("game started")
+        pass  
+    
+    def exit_game(self):
+        pygame.quit()
+        sys.exit()
 
     def run(self):
         while True:
@@ -53,20 +83,27 @@ class Menu:
 
                 # Handle button events
                 self.start_button.handle_event(event)
+                self.credits_button.handle_event(event)
+                self.exit_button.handle_event(event)
 
                 if event.type == pygame.KEYDOWN:
                     pass
 
-            # Update button hover state
+            # Update button hover states
             self.start_button.update_hover(mouse_pos)
+            self.credits_button.update_hover(mouse_pos)
+            self.exit_button.update_hover(mouse_pos)
 
             # Prepare the surface with menu background
-            menu_surface = pygame.image.load(
-                os.path.join("arts", "menu_placeholder.jpeg")
-            )
+            menu_surface = self.menu_surface.copy()
 
-            # Draw button on the surface
+            title_rect = self.title.get_rect(center=(1280 // 2, 200))
+            menu_surface.blit(self.title, title_rect)
+
+            # Draw buttons on the surface
             self.start_button.draw_to_surface(menu_surface)
+            self.credits_button.draw_to_surface(menu_surface)
+            self.exit_button.draw_to_surface(menu_surface)
 
             # Convert surface to texture and render
             self.menu_texture = Texture.from_surface(self.renderer, menu_surface)
