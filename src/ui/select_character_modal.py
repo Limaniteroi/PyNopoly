@@ -15,22 +15,22 @@ class SelectCharacterModal(Modal):
         assets_dir = os.path.join("assets", "characters")
 
         characters = [
-            ("hello-kitty", 300, 250),
-            ("kuromi", 500, 250),
-            ("cinnamoroll", 700, 250),
-            ("my-melody", 300, 500),
-            ("pompompurin", 500, 500),
-            ("keroppi", 700, 500),
+            ("hellokitty", 465, 264),
+            ("kuromi", 601, 264),
+            ("cinnamoroll", 737, 264),
+            ("mymelody", 465, 428),
+            ("pompompurin", 601, 428),
+            ("keroppi", 737, 428),
         ]
 
         for name, x, y in characters:
             normal_img = pygame.image.load(
                 os.path.join(assets_dir, f"card-{name}.png")
-            ).convert_alpha()
+            )
 
             hover_img = pygame.image.load(
                 os.path.join(assets_dir, f"card-{name}-hover.png")
-            ).convert_alpha()
+            )
 
             self.character_cards[name] = CharacterCard(
                 x, y,
@@ -41,17 +41,33 @@ class SelectCharacterModal(Modal):
     def show(self):
         showing = True
         while showing:
+            mouse_pos = pygame.mouse.get_pos()
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE or event.key == pygame.K_RETURN:
                         showing = False
 
-            self.modal_surface.blit(self.modal_image, self.modal_rect)
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    for card in self.character_cards.values():
+                        if card.handle_event(event):
+                            showing = False
+                            break
             
-            modal_texture = Texture.from_surface(self.renderer, self.modal_surface)
+            for card in self.character_cards.values():
+                card.update_hover(mouse_pos)
+            
+            frame_surface = self.modal_surface.copy()
+            frame_surface.blit(self.modal_image, self.modal_rect)
+
+            for card in self.character_cards.values():
+                card.draw_to_surface(frame_surface)
+            
+            modal_texture = Texture.from_surface(self.renderer, frame_surface)
             self.renderer.clear()
             self.renderer.blit(modal_texture)
             self.renderer.present()
