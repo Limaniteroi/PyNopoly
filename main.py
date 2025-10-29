@@ -3,9 +3,12 @@ import sys
 import os
 from pygame._sdl2.video import Window, Renderer, Texture, Image
 
+from src.ui.credits_modal import CreditsModal
+from src.ui.select_character_modal import SelectCharacterModal
+
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "src")))
 
-from ui.button import Button
+from src.ui.button import Button
 
 
 class Menu:
@@ -36,47 +39,34 @@ class Menu:
         credits_button_image = pygame.image.load(os.path.join("assets", "botao-creditos.png"))
         exit_button_image = pygame.image.load(os.path.join("assets", "botao-sair.png"))
 
+        # Load modal images
+        credits_image = pygame.image.load(os.path.join("assets", "modal-creditos.png"))
+        select_character_image = pygame.image.load(os.path.join(
+            "assets", "modal-selecao-personagem.png"))
+        
+        # Create modals
+        credits_modal = CreditsModal(240, 86, 
+                                     self.menu_surface.copy(), 
+                                     credits_image, 
+                                     self.renderer,
+                                     self.clock)
+        # Mudar isso pro início do jogo no futuro, por enquanto está aqui só pra testar
+        select_character_modal = SelectCharacterModal(240, 120,
+                                                      self.menu_surface.copy(),
+                                                      select_character_image,
+                                                      self.renderer,
+                                                      self.clock)
+
         # Load title
         self.title = pygame.image.load(os.path.join("assets", "titulo.png"))
 
         # Create buttons at specified position
-        self.start_button = Button(524, 375, start_button_image, self.start_game)
-        self.credits_button = Button(524, 465, credits_button_image, self.show_credits)
+        self.start_button = Button(524, 375, start_button_image, select_character_modal.show)
+        self.credits_button = Button(524, 465, credits_button_image, credits_modal.show)
         self.exit_button = Button(524, 555, exit_button_image, self.exit_game)
 
     def start_game(self):
-        print("game started")
-    
-    def show_credits(self):
-        modal_surface = self.menu_surface.copy()
-        modal_image = pygame.image.load(os.path.join("assets", "modal-creditos.png"))
-        modal_rect = modal_image.get_rect(topleft=(240, 86))   
-
-        back_button_image = pygame.image.load(os.path.join("assets", "botao-voltar-roxo.png"))  
-        back_button = Button(807, 564, back_button_image)   
-
-        showing = True
-        while showing:
-            mouse_pos = pygame.mouse.get_pos()
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                if back_button.handle_event(event):
-                    showing = False 
-            
-            back_button.update_hover(mouse_pos)
-
-            modal_surface = self.menu_surface.copy()
-            back_button.draw_to_surface(modal_surface)
-            modal_surface.blit(modal_image, modal_rect)
-            
-            modal_texture = Texture.from_surface(self.renderer, modal_surface)
-            self.renderer.clear()
-            self.renderer.blit(modal_texture)
-            self.renderer.present()
-
-            self.clock.tick(60)
+        pass  
     
     def exit_game(self):
         pygame.quit()
