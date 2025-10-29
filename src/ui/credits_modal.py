@@ -23,10 +23,11 @@ class CreditsModal(Modal):
             
             self.back_button.update_hover(mouse_pos)
 
+            frame_surface = self.modal_surface.copy()
+            frame_surface.blit(self.modal_image, self.modal_rect)
             self.back_button.draw_to_surface(self.modal_surface)
-            self.modal_surface.blit(self.modal_image, self.modal_rect)
             
-            modal_texture = Texture.from_surface(self.renderer, self.modal_surface)
+            modal_texture = Texture.from_surface(self.renderer, frame_surface)
             self.renderer.clear()
             self.renderer.blit(modal_texture)
             self.renderer.present()
