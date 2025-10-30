@@ -1,9 +1,24 @@
+import os
+import sys
 import pygame
 from pygame import *
-from .Jogador import Jogador
-import random
+from src.engine.Jogador import Jogador
+
+# Base do projeto (raiz do repositório)
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 
 pygame.init()
+
+# Base do projeto e diretório de artes
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+ARTS_DIR = os.path.join(BASE_DIR, 'assets')
+
+# Fonte para renderizar números
+font = pygame.font.Font(None, 36)  # Tamanho 72 para os números dos dados
+
+# Variáveis para armazenar os valores dos dados
+valor_dado1 = 0
+valor_dado2 = 0
 
 height = 720
 width = 1280
@@ -12,20 +27,23 @@ screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("PyNopoly")
 
 # Baixando o fundo do tabuleiro e os ícones dos jogadores
-background = pygame.image.load("arts/tabuleiro.png").convert_alpha()
+background = pygame.image.load(os.path.join(ARTS_DIR, 'tabuleiro.png')).convert_alpha()
 icon_jogadores = {
-    0: pygame.image.load("arts/active_blue.png").convert_alpha(),
-    1: pygame.image.load("arts/active_green.png").convert_alpha(),
-    2: pygame.image.load("arts/active_pink.png").convert_alpha(),
-    3: pygame.image.load("arts/active_purple.png").convert_alpha()
+    0: pygame.image.load(os.path.join(ARTS_DIR, 'icone-gato-azul.png')).convert_alpha(),
+    1: pygame.image.load(os.path.join(ARTS_DIR, 'icone-gato-rosa.png')).convert_alpha(),
+    2: pygame.image.load(os.path.join(ARTS_DIR, 'icone-gato-roxo.png')).convert_alpha(),
+    3: pygame.image.load(os.path.join(ARTS_DIR, 'icone-gato-verde.png')).convert_alpha()
 }
 
 clock = pygame.time.Clock()
 running = True
 
+
+
 # Criando jogadores
 pecas = {0: "azul", 1: "verde", 2: "rosa", 3: "roxo"}
-jogadores = [Jogador(pecas[i]) for i in range(len(pecas))]
+# Jogador espera (peca, nome). Usamos um nome simples baseado no índice.
+jogadores = [Jogador(pecas[i], f"Jogador {i+1}") for i in range(len(pecas))]
 
 # Mapeando posições das casas do tabuleiro para coordenadas x,y na tela 
 # Expandido para 40 casas (tabuleiro completo do Monopoly)
@@ -132,7 +150,7 @@ def get_draw_pos(jogador_idx: int, pos_interpolada=None):
 # Loop principal
 while running:
     dt = clock.tick(60)
-    
+
     for event in pygame.event.get():
         if event.type == QUIT:
             running = False
@@ -142,9 +160,12 @@ while running:
                 if not animacao.ativa and not animacao.tem_passos_pendentes():
                     jogador_atual = jogadores[current_player]
                     
-                    # Usa o método da classe Jogador para lançar os dados
-                    dados = jogador_atual.lancar_dados()
+                    # Usa o objeto Dados do jogador para lançar os dados
+                    dados = jogador_atual.dados.lancar()
                     valor_total = sum(dados)
+                    
+                    # Atualiza os valores dos dados para renderização
+                    valor_dado1, valor_dado2 = dados[0], dados[1]
                     
                     print(f"\n=== Turno do Jogador {current_player} ({jogador_atual.peca}) ===")
                     print(f"Dados: {dados} = {valor_total}")
@@ -192,11 +213,13 @@ while running:
         
         screen.blit(icon_jogadores[i], draw_pos)
     
-    # Desenha informações do turno (opcional)
-    font = pygame.font.Font(None, 36)
-    turno_text = font.render(f"Turno: {jogadores[current_player].peca}", True, (255, 255, 255))
-    screen.blit(turno_text, (10, 10))
+    # Renderiza os números dos dados
+    texto_dado1 = font.render(str(valor_dado1), True, (255, 255, 255))
+    texto_dado2 = font.render(str(valor_dado2), True, (255, 255, 255))
     
-    pygame.display.flip()
+    # Posiciona os números dos dados na tela
+    screen.blit(texto_dado1, (1190, 540))  # Dado 1 à esquerda
+    screen.blit(texto_dado2, (1230, 540))  # Dado 2 à direita
 
+    pygame.display.flip()
 pygame.quit()
